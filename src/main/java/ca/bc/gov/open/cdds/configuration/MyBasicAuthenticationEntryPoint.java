@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.Configuration;
+package ca.bc.gov.open.cdds.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.Configuration;
+package ca.bc.gov.open.cdds.configuration;
 
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;

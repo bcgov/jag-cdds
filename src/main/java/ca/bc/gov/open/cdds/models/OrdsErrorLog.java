@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.Models;
+package ca.bc.gov.open.cdds.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

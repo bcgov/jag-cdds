@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.Configuration;
+package ca.bc.gov.open.cdds.configuration;
 
 import java.io.IOException;
 import javax.servlet.*;

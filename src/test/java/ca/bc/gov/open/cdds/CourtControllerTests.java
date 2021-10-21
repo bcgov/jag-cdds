@@ -4,8 +4,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ca.bc.gov.open.cdds.Controllers.CourtController;
-import ca.bc.gov.open.cdds.Exceptions.ORDSException;
+import ca.bc.gov.open.cdds.controllers.CourtController;
+import ca.bc.gov.open.cdds.exceptions.ORDSException;
 import ca.bc.gov.open.cdds.one.Appearance;
 import ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtList;

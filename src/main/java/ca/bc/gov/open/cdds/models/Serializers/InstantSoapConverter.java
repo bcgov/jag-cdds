@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.Models.Serializers;
+package ca.bc.gov.open.cdds.models.Serializers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

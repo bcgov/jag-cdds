@@ -1,9 +1,9 @@
-package ca.bc.gov.open.cdds.Controllers;
+package ca.bc.gov.open.cdds.controllers;
 
-import ca.bc.gov.open.cdds.Configuration.SoapConfig;
-import ca.bc.gov.open.cdds.Exceptions.ORDSException;
-import ca.bc.gov.open.cdds.Models.OrdsErrorLog;
-import ca.bc.gov.open.cdds.Models.Serializers.InstantSerializer;
+import ca.bc.gov.open.cdds.configuration.SoapConfig;
+import ca.bc.gov.open.cdds.exceptions.ORDSException;
+import ca.bc.gov.open.cdds.models.OrdsErrorLog;
+import ca.bc.gov.open.cdds.models.Serializers.InstantSerializer;
 import ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtList;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtListResponse;

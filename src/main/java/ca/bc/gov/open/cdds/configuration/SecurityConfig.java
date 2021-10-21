@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.Configuration;
+package ca.bc.gov.open.cdds.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
