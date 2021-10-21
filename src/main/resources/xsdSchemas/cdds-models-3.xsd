@@ -1,0 +1,34 @@
+<xsd:schema xmlns:dx="http://courts.gov.bc.ca/XMLSchema/PCSS/common/1.0.0"
+            targetNamespace="http://courts.gov.bc.ca/XMLSchema/PCSS/common/1.0.0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:simpleType name="AgencyIdentifierType">
+        <xsd:restriction base="xsd:string">
+            <xsd:whiteSpace value="preserve"/>
+            <xsd:maxLength value="16"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="SystemIdType">
+        <xsd:restriction base="xsd:string">
+            <xsd:whiteSpace value="preserve"/>
+            <xsd:maxLength value="16"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="DateType">
+        <xsd:restriction base="xsd:dateTime">
+            <xsd:whiteSpace value="preserve"/>
+            <xsd:length value="21"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="CourtRoomCdType">
+        <xsd:restriction base="xsd:string">
+            <xsd:whiteSpace value="preserve"/>
+            <xsd:maxLength value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="TimeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:whiteSpace value="preserve"/>
+            <xsd:length value="21"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>
