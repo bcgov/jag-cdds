@@ -1,0 +1,16 @@
+security:
+  basic-auth:
+    password: ${BASIC_AUTH_PASS}
+    username: ${BASIC_AUTH_USER}
+cdds:
+  host: ${ORDS_HOST}
+  namespace: ${CDDS_NAMESPACE}
+management:
+  trace:
+    http:
+      include: TIME_TAKEN,RESPONSE_HEADERS
+  endpoints:
+    web:
+      exposure:
+        include: httptrace,metrics,prometheus,health
+
