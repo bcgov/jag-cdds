@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ca.bc.gov.open</groupId>
-    <artifactId>justice-cdds</artifactId>
+    <artifactId>jag-cdds</artifactId>
     <version>1.0</version>
-    <name>justice-cdds</name>
-    <description>justice-cdds</description>
+    <name>jag-cdds</name>
+    <description>jag-cdds</description>
     <properties>
         <default-package>ca.bc.gov.open.cdds</default-package>
         <java.version>11</java.version>
