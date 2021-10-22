@@ -81,6 +81,7 @@ public class CourtController {
                             new OrdsErrorLog(
                                     "Error received from ORDS",
                                     "getDigitalDisplayCourtList",
+                                    ex.getMessage(),
                                     inner)));
             throw new ORDSException();
         }
