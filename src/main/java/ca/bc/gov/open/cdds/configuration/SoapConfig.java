@@ -1,7 +1,7 @@
 package ca.bc.gov.open.cdds.configuration;
 
-import ca.bc.gov.open.cdds.models.Serializers.InstantDeserializer;
-import ca.bc.gov.open.cdds.models.Serializers.InstantSerializer;
+import ca.bc.gov.open.cdds.models.serializers.InstantDeserializer;
+import ca.bc.gov.open.cdds.models.serializers.InstantSerializer;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

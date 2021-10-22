@@ -1,4 +1,4 @@
-package ca.bc.gov.open.cdds.models.Serializers;
+package ca.bc.gov.open.cdds.models.serializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
