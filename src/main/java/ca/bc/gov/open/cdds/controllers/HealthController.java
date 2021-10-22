@@ -26,7 +26,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Slf4j
 public class HealthController {
 
-    @Value("${pcss.host}")
+    @Value("${cdds.host}")
     private String host = "https://127.0.0.1/";
 
     private final RestTemplate restTemplate;
