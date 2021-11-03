@@ -50,7 +50,7 @@ Option A) Intellij
 
 Option B) Jar
 1) Run ```mvn package```
-2) Run ```java -jar ./target/pcss-application.jar```
+2) Run ```java -jar ./target/cdds-application.jar```
 
 Option C) Docker
 1) Run ```mvn package```
