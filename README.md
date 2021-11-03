@@ -55,7 +55,7 @@ Option B) Jar
 Option C) Docker
 1) Run ```mvn package```
 2) Run ```docker build -t cdds-civil-api .``` from root folder
-3) Run ```docker run -p 8080:8080 pcss-civil-api```
+3) Run ```docker run -p 8080:8080 cdds-civil-api```
 
 Option D) Docker Compose
 1) Run ```mvn package```
