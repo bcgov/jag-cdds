@@ -44,7 +44,7 @@ before they can be pushed to.
 
 ### Running the application
 Option A) Intellij
-1) Create intellij run configuration from PCSS Application
+1) Create intellij run configuration from CDDS Application
 2) Set env variables. See the .env-template
 3) Run the application
 
