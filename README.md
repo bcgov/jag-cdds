@@ -39,7 +39,7 @@ before they can be pushed to.
 ### Building the Application
 1) Set intellij to use java 11 for the project modals and sdk
 2) Run ``mvn compile``
-3) Make sure ```target/generated-sources/xjc``` folder in included in module path 
+3) Make sure ```target/generated-sources/xjc``` folder in included in module path
 
 
 ### Running the application
@@ -88,4 +88,3 @@ SPLUNK_INDEX
 ### JaCoCo Coverage Report
 1) Run ```mvn clean verify```
 3) Open ```target/site/jacoco/index.html``` in a browser
-
