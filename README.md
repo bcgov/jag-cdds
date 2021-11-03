@@ -59,7 +59,7 @@ Option C) Docker
 
 Option D) Docker Compose
 1) Run ```mvn package```
-2) Run ```docker-compose up pcss-civil-api```
+2) Run ```docker-compose up cdds-civil-api```
 
 Option D) Eclipse
 1) Clone the project into a local folder.
