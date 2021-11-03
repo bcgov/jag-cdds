@@ -87,5 +87,5 @@ SPLUNK_INDEX
 
 ### JaCoCo Coverage Report
 1) Run ```mvn clean verify```
-3) Open ```pcss-code-coverage/target/site/jacoco-aggregate/index.html``` in a browser
+3) Open ```target/site/jacoco/index.html``` in a browser
 
