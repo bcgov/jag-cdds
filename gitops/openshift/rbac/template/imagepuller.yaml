@@ -31,7 +31,6 @@ objects:
   - kind: ServiceAccount
     name: ${SA_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
-    apiGroup: rbac.authorization.k8s.io
   roleRef:
     kind: ClusterRole
     name: system:image-puller
