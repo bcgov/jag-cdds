@@ -25,7 +25,7 @@ parameters:
   description: The OpenShift namespace prefix
   required: false
   # Below value must be changed as per gold cluster oc nameplate
-  value: 17b24e
+  value: 8fc8c2
 
 - name: OC_ENV
   description: The OpenShift environment, ie dev, test or prod
@@ -45,6 +45,12 @@ parameters:
   description: The target endpoint
   required: false
   value: jag-cdds-oldwm
+
+- name: DNS
+  description: The application name that each component is part of
+  required: false
+  # Below value must be changed as per gold cluster certificate/DNS
+  value: apps.gold.devops.gov.bc.ca
 
 objects:
 
@@ -109,45 +115,6 @@ objects:
         # Tured off for now
         # server nginx-jag-cdds-oldwm;
       }
-
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: "${COMPONENT_NAME}"
-    namespace: ${OC_NAMESPACE}-tools
-
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: "${COMPONENT_NAME}"
-    namespace: ${OC_NAMESPACE}-${OC_ENV}
-  spec:
-    source:
-      type: Git
-      git:
-        uri: "https://github.com/sclorg/nginx-ex.git"
-    strategy:
-      type: Source
-      sourceStrategy:
-        from:
-          kind: ImageStreamTag
-          namespace: openshift
-          name: 'nginx:1.16-el8'
-    output:
-      to:
-        kind: ImageStreamTag
-        name: "${COMPONENT_NAME}:latest"
-        namespace: ${OC_NAMESPACE}-tools
-     
-    triggers:
-    - type: ImageChange
-    - type: ConfigChange
-    - type: GitHub
-      github:
-        secret: ${COMPONENT_NAME}-github-webhook-secret
-    - type: Generic
-      generic:
-        secret: ${COMPONENT_NAME}-generic-webhook-secret
 
 - kind: DeploymentConfig
   apiVersion: apps.openshift.io/v1
@@ -252,8 +219,6 @@ objects:
     # balance algorithm
     haproxy.router.openshift.io/balance: roundrobin
   spec:
-    # Below value must be changed as per gold cluster certificate/DNS
-    host: ${COMPONENT_NAME}-${OC_NAMESPACE}-${OC_ENV}.apps.silver.devops.gov.bc.ca
     to:
       kind: Service
       name: ${COMPONENT_NAME}
