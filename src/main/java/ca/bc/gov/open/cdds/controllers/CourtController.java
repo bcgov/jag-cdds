@@ -3,6 +3,7 @@ package ca.bc.gov.open.cdds.controllers;
 import ca.bc.gov.open.cdds.configuration.SoapConfig;
 import ca.bc.gov.open.cdds.exceptions.ORDSException;
 import ca.bc.gov.open.cdds.models.OrdsErrorLog;
+import ca.bc.gov.open.cdds.models.RequestSuccessLog;
 import ca.bc.gov.open.cdds.models.serializers.InstantSerializer;
 import ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtList;
@@ -22,6 +23,9 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.springframework.ws.transport.context.TransportContext;
+import org.springframework.ws.transport.context.TransportContextHolder;
+import org.springframework.ws.transport.http.HttpServletConnection;
 
 @Endpoint
 @Slf4j
@@ -43,6 +47,7 @@ public class CourtController {
     @ResponsePayload
     public GetDigitalDisplayCourtListResponse getDigitalDisplayCourtList(
             @RequestPayload GetDigitalDisplayCourtList search) throws JsonProcessingException {
+        addEndpointHeader("getDigitalDisplayCourtList");
         var inner =
                 search.getGetDigitalDisplayCourtListRequest() != null
                                 && search.getGetDigitalDisplayCourtListRequest()
@@ -74,6 +79,10 @@ public class CourtController {
             var one = new GetDigitalDisplayCourtListResponse2();
             one.setGetDigitalDisplayCourtListResponse(resp.getBody());
             out.setGetDigitalDisplayCourtListResponse(one);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog(
+                                    "Request Success", "getDigitalDisplayCourtList")));
             return out;
         } catch (Exception ex) {
             log.error(
@@ -84,6 +93,16 @@ public class CourtController {
                                     ex.getMessage(),
                                     inner)));
             throw new ORDSException();
+        }
+    }
+
+    private void addEndpointHeader(String endpoint) {
+        try {
+            TransportContext context = TransportContextHolder.getTransportContext();
+            HttpServletConnection connection = (HttpServletConnection) context.getConnection();
+            connection.addResponseHeader("Endpoint", endpoint);
+        } catch (Exception ex) {
+            log.warn("Failed to add endpoint response header");
         }
     }
 }
