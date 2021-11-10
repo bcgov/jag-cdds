@@ -215,11 +215,6 @@ jobs:
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
 
-      - name: Sleep for 120s
-        uses: juliangruber/sleep-action@v1
-        with:
-          time: 120s
-
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
