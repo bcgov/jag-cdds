@@ -128,7 +128,7 @@
     </wsdl:binding>
     <wsdl:service name="JusticeCDDS.wsProvider.cdds">
         <wsdl:port binding="tns:JusticeCDDS_wsProvider_cdds_Binder" name="JusticeCDDS_wsProvider_cdds_Port">
-            <soap12:address location="http://127.0.0.1:8080/ws/JusticeCDDS.wsProvider.cdds/JusticeCDDS_wsProvider_cdds_Port"/>
+            <soap12:address location="https://jag-cdds-c71a03-dev.apps.silver.devops.gov.bc.ca:443/ws/JusticeCDDS.wsProvider.cdds/JusticeCDDS_wsProvider_cdds_Port"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
