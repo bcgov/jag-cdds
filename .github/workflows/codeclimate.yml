@@ -4,9 +4,9 @@ name: CodeClimate Workflow
 # Triggers that controls when the workflow will run
 on:
   push:
-    branches: [main]
+    branches: [release/*]
   pull_request:
-    branches: [main]
+    branches: [release/*]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -76,20 +76,17 @@ jobs:
         run: mvn -ntp spotless:check
           
       - name: Run Maven Test
-        run: mvn -ntp test
-        
-      - name: Run jacoco report
-        run: mvn -ntp jacoco:report
-        
+        run: mvn -ntp verify
+
         # Formatting the Code Coverage Report
       - name: Format the coverage report
-        run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage ./target/site/jacoco/jacoco.xml -t jacoco -o ./target/site/jacoco/codeclimate.json
+        run: JACOCO_SOURCE_PATH="src/main/java target/generated-sources/xjc"  ./cc-test-reporter format-coverage ./target/site/jacoco/jacoco.xml -t jacoco -o ./target/site/jacoco/codeclimate.json
         
         # Upload JSON for debugging purposes
       - name: Upload JSON for debugging purposes
         uses: actions/upload-artifact@v2
         with:
-          name: scss-coverage-report
+          name: cdds-coverage-report
           path: ./target/site/jacoco/codeclimate.json
       
       # Upload total coverage report to Code Climate
