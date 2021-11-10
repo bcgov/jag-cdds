@@ -4,9 +4,9 @@ name: CodeClimate Workflow
 # Triggers that controls when the workflow will run
 on:
   push:
-    branches: [main]
+    branches: [release/*]
   pull_request:
-    branches: [main]
+    branches: [release/*]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
