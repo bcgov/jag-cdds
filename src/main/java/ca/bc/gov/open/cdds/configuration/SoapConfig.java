@@ -8,29 +8,88 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.soap.SOAPMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
+import org.springframework.ws.server.EndpointInterceptor;
 import org.springframework.ws.soap.SoapVersion;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
+import org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
+import org.springframework.xml.validation.XmlValidator;
+import org.springframework.xml.validation.XmlValidatorFactory;
+import org.springframework.xml.xsd.SimpleXsdSchema;
+import org.springframework.xml.xsd.XsdSchema;
+import org.springframework.xml.xsd.XsdSchemaCollection;
 
 @EnableWs
 @Configuration
+@Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
 
     public static final String SOAP_NAMESPACE = "http://courts.gov.bc.ca/xml/ns/cdds/v1";
+
+    @Override
+    public void addInterceptors(List<EndpointInterceptor> interceptors) {
+//      There are 2 versions of schemas to de couple model generation and request validation
+//      Suffix v means its a validation schema
+        var validatingInterceptor1 = interceptor1();
+        interceptors.add(validatingInterceptor1);
+    }
+
+    private PayloadValidatingInterceptor interceptor1() {
+        PayloadValidatingInterceptor validatingInterceptor = new PayloadValidatingInterceptor();
+        validatingInterceptor.setValidateRequest(true);
+        validatingInterceptor.setValidateResponse(true);
+        validatingInterceptor.setXsdSchemaCollection(
+                new XsdSchemaCollection() {
+                    @Override
+                    public XsdSchema[] getXsdSchemas() {
+                        return new XsdSchema[] {
+                            new SimpleXsdSchema(
+                                    new ClassPathResource("xsdSchemas/cdds-models-1v.xsd")),
+                            new SimpleXsdSchema(
+                                    new ClassPathResource("xsdSchemas/cdds-models-2v.xsd")),
+                            new SimpleXsdSchema(
+                                    new ClassPathResource("xsdSchemas/cdds-models-3v.xsd"))
+                        };
+                    }
+
+                    @Override
+                    public XmlValidator createValidator() {
+                        try {
+                            return XmlValidatorFactory.createValidator(
+                                    getSchemas(), "http://www.w3.org/2001/XMLSchema");
+                        } catch (Exception e) {
+                            log.warn("XSD schema validation failed");
+                        }
+                        return null;
+                    }
+
+                    public Resource[] getSchemas() {
+                        return new Resource[] {
+                            new ClassPathResource("xsdSchemas/cdds-models-1v.xsd"),
+                            new ClassPathResource("xsdSchemas/cdds-models-2v.xsd"),
+                            new ClassPathResource("xsdSchemas/cdds-models-3v.xsd")
+                        };
+                    }
+                });
+        return validatingInterceptor;
+    }
 
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(

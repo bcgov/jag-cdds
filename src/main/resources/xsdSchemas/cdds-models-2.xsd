@@ -1,7 +1,7 @@
 <xsd:schema xmlns:pcss="http://courts.gov.bc.ca/XMLSchema/PCSS/1.0.0"
             targetNamespace="http://courts.gov.bc.ca/xml/ns/cdds/v1" xmlns:tns="http://courts.gov.bc.ca/xml/ns/cdds/v1"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <xsd:import namespace="http://courts.gov.bc.ca/XMLSchema/PCSS/1.0.0"/>
+    <xsd:import namespace="http://courts.gov.bc.ca/XMLSchema/PCSS/1.0.0" schemaLocation="cdds-models-1.xsd"/>
 
     <xsd:element name="getPing">
         <xsd:complexType >
