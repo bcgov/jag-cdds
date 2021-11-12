@@ -61,11 +61,11 @@ public class SoapConfig extends WsConfigurerAdapter {
                     public XsdSchema[] getXsdSchemas() {
                         return new XsdSchema[] {
                             new SimpleXsdSchema(
-                                    new ClassPathResource("xsdSchemas/cdds-models-1v.xsd")),
+                                    new ClassPathResource("validation/cdds-models-1v.xsd")),
                             new SimpleXsdSchema(
-                                    new ClassPathResource("xsdSchemas/cdds-models-2v.xsd")),
+                                    new ClassPathResource("validation/cdds-models-2v.xsd")),
                             new SimpleXsdSchema(
-                                    new ClassPathResource("xsdSchemas/cdds-models-3v.xsd"))
+                                    new ClassPathResource("validation/cdds-models-3v.xsd"))
                         };
                     }
 
@@ -82,9 +82,9 @@ public class SoapConfig extends WsConfigurerAdapter {
 
                     public Resource[] getSchemas() {
                         return new Resource[] {
-                            new ClassPathResource("xsdSchemas/cdds-models-1v.xsd"),
-                            new ClassPathResource("xsdSchemas/cdds-models-2v.xsd"),
-                            new ClassPathResource("xsdSchemas/cdds-models-3v.xsd")
+                            new ClassPathResource("validation/cdds-models-1v.xsd"),
+                            new ClassPathResource("validation/cdds-models-2v.xsd"),
+                            new ClassPathResource("validation/cdds-models-3v.xsd")
                         };
                     }
                 });
