@@ -1,6 +1,6 @@
 package ca.bc.gov.open.cdds.configuration;
 
-import ca.bc.gov.open.cdds.models.ValidationFail;
+import ca.bc.gov.open.cdds.models.ValidationFailLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class CustomPayloadValidator extends PayloadValidatingInterceptor {
                                 try {
                                     log.error(
                                             objectMapper.writeValueAsString(
-                                                    new ValidationFail(e.getMessage())));
+                                                    new ValidationFailLog(e.getMessage())));
                                 } catch (JsonProcessingException ignored) {
                                 }
                             });

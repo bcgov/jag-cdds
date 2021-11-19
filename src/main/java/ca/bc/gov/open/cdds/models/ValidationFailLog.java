@@ -5,6 +5,6 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class ValidationFail {
+public class ValidationFailLog {
     private String message;
 }
