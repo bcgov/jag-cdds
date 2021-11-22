@@ -5,6 +5,7 @@ import ca.bc.gov.open.cdds.exceptions.ORDSException;
 import ca.bc.gov.open.cdds.models.OrdsErrorLog;
 import ca.bc.gov.open.cdds.models.RequestSuccessLog;
 import ca.bc.gov.open.cdds.models.serializers.InstantSerializer;
+import ca.bc.gov.open.cdds.models.serializers.InstantSoapConverter;
 import ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtList;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtListResponse;
@@ -77,7 +78,13 @@ public class CourtController {
 
             var out = new GetDigitalDisplayCourtListResponse();
             var one = new GetDigitalDisplayCourtListResponse2();
-            one.setGetDigitalDisplayCourtListResponse(resp.getBody());
+            var in = resp.getBody();
+            for (var x : in.getAppearance()) {
+                String newTime = InstantSoapConverter.convertFromAmTo24(x.getAppearanceTime());
+                x.setAppearanceTime(newTime);
+            }
+
+            one.setGetDigitalDisplayCourtListResponse(in);
             out.setGetDigitalDisplayCourtListResponse(one);
             log.info(
                     objectMapper.writeValueAsString(

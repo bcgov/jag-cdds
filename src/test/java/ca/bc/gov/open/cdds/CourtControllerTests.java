@@ -69,7 +69,7 @@ public class CourtControllerTests {
         a.setCtrmRoomCd("A");
         a.setCourtListTypeDsc("A");
         a.setStatusDsc("A");
-        a.setAppearanceTime("A");
+        a.setAppearanceTime("22-APR-19 09.00.00.000000 AM");
         a.setAppearanceReasonCd("A");
         a.setAppearanceReasonDsc("A");
         a.setCourtDivisionCd("A");
