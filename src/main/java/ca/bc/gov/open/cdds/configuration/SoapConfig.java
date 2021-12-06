@@ -53,7 +53,7 @@ public class SoapConfig extends WsConfigurerAdapter {
 
     private PayloadValidatingInterceptor interceptor1() {
         CustomPayloadValidator validatingInterceptor = new CustomPayloadValidator();
-        validatingInterceptor.setValidateRequest(true);
+        // validatingInterceptor.setValidateRequest(true);
         validatingInterceptor.setXsdSchemaCollection(
                 new XsdSchemaCollection() {
                     @Override
