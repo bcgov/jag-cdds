@@ -48,7 +48,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         //      There are 2 versions of schemas to de couple model generation and request validation
         //      Suffix v means its a validation schema
         var validatingInterceptor1 = interceptor1();
-        interceptors.add(validatingInterceptor1);
+        // interceptors.add(validatingInterceptor1);
     }
 
     private PayloadValidatingInterceptor interceptor1() {
