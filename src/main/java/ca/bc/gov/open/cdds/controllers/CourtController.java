@@ -62,10 +62,10 @@ public class CourtController {
                 UriComponentsBuilder.fromHttpUrl(host + "court-list")
                         .queryParam("requestAgenId", inner.getRequestAgencyIdentifierId())
                         .queryParam("requestPartId", inner.getRequestPartId())
-                        .queryParam("requestDtm", InstantSerializer.convert(inner.getRequestDtm()))
+                        .queryParam("requestDtm", inner.getRequestDtm())
                         .queryParam("agencyIdentifierId", inner.getAgencyIdentifierId())
                         .queryParam(
-                                "appearanceDt", InstantSerializer.convert(inner.getAppearanceDt()))
+                                "appearanceDt", inner.getAppearanceDt())
                         .queryParam("ctrmRoomCd", inner.getCtrmRoomCd());
 
         try {

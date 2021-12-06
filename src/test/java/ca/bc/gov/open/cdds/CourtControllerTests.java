@@ -49,10 +49,10 @@ public class CourtControllerTests {
         var two = new ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest();
 
         two.setAgencyIdentifierId("A");
-        two.setAppearanceDt(Instant.now());
+        two.setAppearanceDt("A");
         two.setCtrmRoomCd("A");
         two.setRequestPartId("A");
-        two.setRequestDtm(Instant.now());
+        two.setRequestDtm("A");
         two.setRequestAgencyIdentifierId("A");
 
         one.setGetDigitalDisplayCourtListRequest(two);
