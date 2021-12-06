@@ -4,7 +4,6 @@ import ca.bc.gov.open.cdds.configuration.SoapConfig;
 import ca.bc.gov.open.cdds.exceptions.ORDSException;
 import ca.bc.gov.open.cdds.models.OrdsErrorLog;
 import ca.bc.gov.open.cdds.models.RequestSuccessLog;
-import ca.bc.gov.open.cdds.models.serializers.InstantSerializer;
 import ca.bc.gov.open.cdds.models.serializers.InstantSoapConverter;
 import ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtList;
@@ -64,8 +63,7 @@ public class CourtController {
                         .queryParam("requestPartId", inner.getRequestPartId())
                         .queryParam("requestDtm", inner.getRequestDtm())
                         .queryParam("agencyIdentifierId", inner.getAgencyIdentifierId())
-                        .queryParam(
-                                "appearanceDt", inner.getAppearanceDt())
+                        .queryParam("appearanceDt", inner.getAppearanceDt())
                         .queryParam("ctrmRoomCd", inner.getCtrmRoomCd());
 
         try {
