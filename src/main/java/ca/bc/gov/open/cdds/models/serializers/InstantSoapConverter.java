@@ -47,10 +47,10 @@ public final class InstantSoapConverter {
     }
 
     public static String convertFromAmTo24(String appearanceTime) throws ParseException {
-        var sdf = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS a", Locale.US);
+        var sdf = new SimpleDateFormat("dd-MMM-yy KK.mm.ss.SSSSSS a", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-7"));
         var d = sdf.parse(appearanceTime).toInstant();
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.S")
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")
                 .withZone(ZoneId.of("GMT-7"))
                 .withLocale(Locale.US)
                 .format(d);
