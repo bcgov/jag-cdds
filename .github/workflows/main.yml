@@ -84,9 +84,15 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
+          scan-type: image
           image-ref: 'jag-cdds:local'
+          hide-progress: false
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
-          scan-type: image
           severity: 'CRITICAL,HIGH'
+      
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
