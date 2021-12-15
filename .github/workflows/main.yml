@@ -73,24 +73,19 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: .
-          IMAGE: jag-cdds:local
         run: |
-          docker build \
-            --tag ${IMAGE} \
-            ${CONTEXT}
+          docker build -t docker.io/bcgov/jag-cdds:${{ github.sha }} .
       
       #Run Vulnerability Scan
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@2a2157eb22c08c9a1fac99263430307b8d1bc7a2
         with:
-          scan-type: image
-          image-ref: 'jag-cdds:local'
-          hide-progress: false
-          format: 'table'
-          ignore-unfixed: true
+          image-ref: 'docker.io/bcgov/jag-cdds:${{ github.sha }}'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
-      
+
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         with:
