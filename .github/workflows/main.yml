@@ -74,14 +74,14 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker build -t docker.io/bcgov/jag-cdds:${{ github.sha }} .
+          docker build -t jag-cdds:${{ github.sha }} .
       
       #Run Vulnerability Scan
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: docker.io/bcgov/jag-cdds:${{ github.sha }}
+          image-ref: jag-cdds:${{ github.sha }}
           format: template
           template: '@/contrib/sarif.tpl'
           output: trivy-results.sarif
