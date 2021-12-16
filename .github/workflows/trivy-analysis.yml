@@ -1,13 +1,13 @@
 # This workflow is used to build & scan image using trivy vulnerability scanner and upload the results to github security tab
 
-name: buildandscan
+name: Build & Vulnerability Scan using Trivy Scanner
 
 on:
   push:
-    branches: [ main, release/*, feature/* ]
+    branches: [ main, release/*]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main, release/*, feature/* ]
+    branches: [ main, release/*]
 
 jobs:
   buildandscan:
@@ -40,7 +40,7 @@ jobs:
         run: |
           docker build -t jag-cdds:${{ github.sha }} .
 
-      #Run Vulnerability Scan
+      #Run Vulnerability Scan usinig Trivy scanner
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -52,6 +52,7 @@ jobs:
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
+      #Upload results to the Github security tab.
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         with:
