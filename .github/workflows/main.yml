@@ -67,8 +67,16 @@ jobs:
         
       - name: Maven Verify
         run: mvn -ntp clean verify
+      
+      #Login to OpenShift Container Repository - Silver
+      - name: Login to OpenShift Container Repository - Silver
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}
+          username: ${{secrets.OPENSHIFT_SA_USERNAME}}
+          password: ${{secrets.OPENSHIFT_SA_PASSWORD_SILVER}}
 
-      #Build image
+      #Build and push image to OpenShift Image stream - Silver
       - name: Build & Push Image to Openshift Image Stream - Silver
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
@@ -79,41 +87,8 @@ jobs:
           docker build \
             --tag ${IMAGE} \
             ${CONTEXT}
-
-      #Run Vulnerability Scan
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/jag-cdds:${{secrets.OPENSHIFT_ENV_TAG}}'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-          scan-type: image
-          severity: 'CRITICAL,HIGH'
-
-      #Upload Scan Report to GitHub
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: 'trivy-results.sarif'
-
-      #Login to OpenShift Container Repository - Silver
-      - name: Login to OpenShift Container Repository - Silver
-        uses: docker/login-action@v1
-        with:
-          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}
-          username: ${{secrets.OPENSHIFT_SA_USERNAME}}
-          password: ${{secrets.OPENSHIFT_SA_PASSWORD_SILVER}}
-
-      #Build and push image to OpenShift Image stream - Silver
-      - name: Push Image to Openshift Image Stream - Silver
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE_SILVER}}/jag-cdds:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker push ${IMAGE}
-
+            docker push ${IMAGE}
+      
       #Login to OpenShift Container Repository - Kamloops (OC PROD)
       - name: Login to OpenShift Container Repository - Kamloops (OC PROD)
         uses: docker/login-action@v1
