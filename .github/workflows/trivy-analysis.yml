@@ -1,0 +1,42 @@
+# This workflow is used to build & scan image using trivy vulnerability scanner and upload the results to github security tab
+
+name: buildandscan
+
+on:
+  push:
+    branches: [ main, release/*, feature/* ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main, release/*, feature/* ]
+
+jobs:
+  buildandscan:
+    name: Build & Scan Image
+    runs-on: "ubuntu-20.04"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build an image from Dockerfile
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker build -t jag-cdds:${{ github.sha }} .
+
+      #Run Vulnerability Scan
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: jag-cdds:${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: trivy-results.sarif
