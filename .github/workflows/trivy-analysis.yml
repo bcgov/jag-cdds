@@ -48,8 +48,9 @@ jobs:
           image-ref: jag-cdds:${{ github.sha }}
           format: template
           template: '@/contrib/sarif.tpl'
+          ignorefile: .trivyignore
           output: trivy-results.sarif
-          exit-code: 1
+          #exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
