@@ -47,6 +47,11 @@ parameters:
   required: false
   # Below value must be changed as per gold cluster certificate/DNS
   value: apps.gold.devops.gov.bc.ca
+
+- name: AUTH_HEADER
+  description: The http Authorization header required for performing livenessProbe & readinessProbe in deployment config during container start.
+  required: true
+  value: ''
   
 objects:
 
@@ -117,31 +122,37 @@ objects:
                   key: ORDS_HOST
             resources:
               limits:
-                cpu: 1000m
-                memory: 1000Mi
-              requests:
                 cpu: 500m
                 memory: 512Mi
-              livenessProbe:
-                httpGet:
-                  path: "/actuator/health"
-                  port: 8080
-                  scheme: HTTP
-                initialDelaySeconds: 30
-                timeoutSeconds: 60
-                periodSeconds: 10
-                successThreshold: 1
-                failureThreshold: 3
-              readinessProbe:
-                httpGet:
-                  path: "/actuator/health"
-                  port: 8080
-                  scheme: HTTP
-                initialDelaySeconds: 10
-                timeoutSeconds: 60
-                periodSeconds: 10
-                successThreshold: 1
-                failureThreshold: 3
+              requests:
+                cpu: 50m
+                memory: 256Mi
+            livenessProbe:
+              httpGet:
+                path: "/actuator/health"
+                port: 8080
+                scheme: HTTP
+                httpHeaders:
+                - name: Authorization
+                  value: ${AUTH_HEADER}
+              initialDelaySeconds: 100
+              timeoutSeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            readinessProbe:
+              httpGet:
+                path: "/actuator/health"
+                port: 8080
+                scheme: HTTP
+                httpHeaders:
+                - name: Authorization
+                  value: ${AUTH_HEADER}
+              initialDelaySeconds: 100
+              timeoutSeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
     triggers:
       - type: ConfigChange
       - type: ImageChange
