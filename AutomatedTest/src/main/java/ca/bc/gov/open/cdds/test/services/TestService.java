@@ -23,15 +23,15 @@ public class TestService {
     public TestService() {}
 
     public void setAuthentication() throws IOException {
-        InputStream template = getClass().getResourceAsStream("/scss-soapui-project-template.xml");
+        InputStream template = getClass().getResourceAsStream("/CDDS-soapui-project-template.xml");
         Scanner scanner = new Scanner(template);
 
-        File project = new File("./scss-soapui-project.xml");
+        File project = new File("./cdds-soapui-project.xml");
         if (project.exists()) {
             project.delete();
         }
         project.createNewFile();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("./scss-soapui-project.xml"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("./CDDS-soapui-project.xml"));
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.contains("{AUTHENTICATION_USERNAME}")) {
@@ -52,7 +52,7 @@ public class TestService {
 
     private File zipAndReturnErrors() throws IOException {
         File dir = new File(".");
-        FileFilter fileFilter = new WildcardFileFilter("TestSuite_SCSS-*.txt");
+        FileFilter fileFilter = new WildcardFileFilter("TestSuite_cdds-*.txt");
         File[] files = dir.listFiles(fileFilter);
         FileOutputStream fos = new FileOutputStream("TestErrors.zip");
         ZipOutputStream zipOut = new ZipOutputStream(fos);
@@ -78,7 +78,7 @@ public class TestService {
 
     public File runAllTests() throws IOException {
         SoapUITestCaseRunner runner = new SoapUITestCaseRunner();
-        runner.setProjectFile("scss-soapui-project.xml");
+        runner.setProjectFile("CDDS-soapui-project.xml");
         try {
             runner.run();
             return null;
