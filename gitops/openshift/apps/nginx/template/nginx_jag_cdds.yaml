@@ -219,6 +219,8 @@ objects:
     # balance algorithm
     haproxy.router.openshift.io/balance: roundrobin
   spec:
+    # Below value must be changed as per gold cluster certificate/DNS
+    host: ${COMPONENT_NAME}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
     to:
       kind: Service
       name: ${COMPONENT_NAME}

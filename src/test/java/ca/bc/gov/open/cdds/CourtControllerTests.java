@@ -13,7 +13,6 @@ import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtListRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -49,10 +48,10 @@ public class CourtControllerTests {
         var two = new ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest();
 
         two.setAgencyIdentifierId("A");
-        two.setAppearanceDt(Instant.now());
+        two.setAppearanceDt("A");
         two.setCtrmRoomCd("A");
         two.setRequestPartId("A");
-        two.setRequestDtm(Instant.now());
+        two.setRequestDtm("A");
         two.setRequestAgencyIdentifierId("A");
 
         one.setGetDigitalDisplayCourtListRequest(two);
@@ -69,7 +68,7 @@ public class CourtControllerTests {
         a.setCtrmRoomCd("A");
         a.setCourtListTypeDsc("A");
         a.setStatusDsc("A");
-        a.setAppearanceTime("A");
+        a.setAppearanceTime("22-APR-19 09.00.00.000000 AM");
         a.setAppearanceReasonCd("A");
         a.setAppearanceReasonDsc("A");
         a.setCourtDivisionCd("A");

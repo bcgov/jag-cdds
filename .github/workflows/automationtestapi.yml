@@ -1,6 +1,6 @@
-# This is the main workflow that creates a new image and push to Openshift image stream which in turn triggers the deployment
+# This is the workflow that creates a new automation test api image and push to Openshift image stream which in turn triggers the deployment
 
-name: Main - Build Image and Push to Openshift Registry for Dev Deployment
+name: AutomationTestAPI - Build Image and Push to Openshift Registry for Dev Deployment
 
 # Controls when the workflow will run
 on:
@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
         app:
-            description: 'App Name (jag-cdds)'    
+            description: 'App Name (jag-cdds-tests)'
             required: true
-            default: jag-cdds
+            default: jag-cdds-tests
         env:
             description: 'Image Target Env'     
             required: true
@@ -23,9 +23,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
     environment: ${{ github.event.inputs.env }}
-    env:
-      BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
-      BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -63,10 +60,8 @@ jobs:
         
       # Runs build steps
       - name: Maven Package
+        working-directory: AutomatedTest
         run: mvn -ntp clean package
-        
-      - name: Maven Verify
-        run: mvn -ntp clean verify
       
       - name: Maven Spotless Check
         run: mvn -ntp spotless:check
@@ -84,8 +79,8 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: .
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE_SILVER}}/jag-cdds:${{secrets.OPENSHIFT_ENV_TAG}}
+          CONTEXT: ./AutomatedTest
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_SILVER}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE_SILVER}}/jag-cdds-tests:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker build \
             --tag ${IMAGE} \
@@ -105,8 +100,8 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: .
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/jag-cdds:${{secrets.OPENSHIFT_ENV_TAG}}
+          CONTEXT: ./AutomatedTest
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/jag-cdds-tests:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker build \
             --tag ${IMAGE} \
@@ -126,8 +121,8 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: .
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/jag-cdds:${{secrets.OPENSHIFT_ENV_TAG}}
+          CONTEXT: ./AutomatedTest
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/jag-cdds-tests:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker build \
             --tag ${IMAGE} \
@@ -217,17 +212,3 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
-
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-    
-      - name: Run Integration Tests
-        env:
-          WEB_METHODS_TOKEN: ${{secrets.CDDS_DEV_BASIC_AUTH}}
-          WEB_METHODS_HOST: ${{secrets.WEB_METHODS_HOST}}
-        working-directory: ./AutomatedTests
-        run: |
-          npm install --quiet
-          npm test

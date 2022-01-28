@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
         inputs:
             app:
-                description: 'App Name (jag-cdds)'    
+                description: 'App Name (jag-cdds/jag-cdds-tests)'    
                 required: true
                 default: 'jag-cdds'
             imageSourceEnv:
@@ -207,11 +207,6 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.imageTargetEnv }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
-
-      - name: Sleep for 120s
-        uses: juliangruber/sleep-action@v1
-        with:
-          time: 120s
 
       - name: Setup Node
         uses: actions/setup-node@v2
