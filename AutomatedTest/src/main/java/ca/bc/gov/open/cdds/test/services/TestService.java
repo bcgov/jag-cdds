@@ -3,7 +3,6 @@ package ca.bc.gov.open.cdds.test.services;
 import com.eviware.soapui.tools.SoapUITestCaseRunner;
 import java.io.*;
 import java.util.Scanner;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.tools.zip.ZipEntry;
@@ -54,7 +53,7 @@ public class TestService {
 
     private File zipAndReturnErrors() throws IOException {
         File dir = new File(".");
-        FileFilter fileFilter = new WildcardFileFilter("TestSuite_cdds-*.txt");
+        FileFilter fileFilter = new WildcardFileFilter("CDDSTestSuite*-FAILED.txt");
         File[] files = dir.listFiles(fileFilter);
         sanitizeErrorFiles(files);
         FileOutputStream fos = new FileOutputStream("TestErrors.zip");
@@ -78,23 +77,24 @@ public class TestService {
         fos.close();
         return fOut;
     }
-        private void sanitizeErrorFiles (File[]files) throws IOException {
-            for (File f : files) {
-                String fileContent = FileUtils.readFileToString(f);
-                fileContent = fileContent.replaceAll(username, "*".repeat(8));
-                fileContent = fileContent.replaceAll(password, "*".repeat(8));
-                FileUtils.write(f, fileContent);
-            }
-        }
 
-        public File runAllTests () throws IOException {
-            SoapUITestCaseRunner runner = new SoapUITestCaseRunner();
-            runner.setProjectFile("CDDS-soapui-project.xml");
-            try {
-                runner.run();
-                return null;
-            } catch (Exception ignored) {
-                return zipAndReturnErrors();
-            }
+    private void sanitizeErrorFiles(File[] files) throws IOException {
+        for (File f : files) {
+            String fileContent = FileUtils.readFileToString(f);
+            fileContent = fileContent.replaceAll(username, "*".repeat(8));
+            fileContent = fileContent.replaceAll(password, "*".repeat(8));
+            FileUtils.write(f, fileContent);
         }
     }
+
+    public File runAllTests() throws IOException {
+        SoapUITestCaseRunner runner = new SoapUITestCaseRunner();
+        runner.setProjectFile("CDDS-soapui-project.xml");
+        try {
+            runner.run();
+            return null;
+        } catch (Exception ignored) {
+            return zipAndReturnErrors();
+        }
+    }
+}
