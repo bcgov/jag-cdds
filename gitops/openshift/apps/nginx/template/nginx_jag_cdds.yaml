@@ -112,8 +112,6 @@ objects:
     nginx-upstream.conf: |-
       upstream splitter {
         server jag-cdds;
-        # Tured off for now
-        # server nginx-jag-cdds-oldwm;
       }
 
 - kind: DeploymentConfig
