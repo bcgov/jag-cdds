@@ -36,3 +36,6 @@ build/
 /AutomatedTests/cypress/videos/
 /AutomatedTests/cypress/screenshots/
 cc-test-reporter
+/cdds-soapui-project.xml
+/TestErrors.zip
+CDDSTestSuite*-FAILED.txt

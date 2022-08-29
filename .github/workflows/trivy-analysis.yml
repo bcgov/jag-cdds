@@ -8,6 +8,8 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ main, release/*]
+  workflow_dispatch:
+    branches: [ main, release/*]
 
 jobs:
   build-scan-image:
@@ -38,16 +40,15 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker build -t jag-cdds:${{ github.sha }} .
+          docker build -t docker.io/cdds/jag-cdds:${{ github.sha }} .
 
       #Run Vulnerability Scan usinig Trivy scanner
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: jag-cdds:${{ github.sha }}
-          format: template
-          template: '@/contrib/sarif.tpl'
+          image-ref: docker.io/cdds/jag-cdds:${{ github.sha }}
+          format: sarif
           output: trivy-results.sarif
           exit-code: 1
           ignore-unfixed: true
@@ -55,7 +56,7 @@ jobs:
 
       #Upload results to the Github security tab.
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
           sarif_file: trivy-results.sarif
