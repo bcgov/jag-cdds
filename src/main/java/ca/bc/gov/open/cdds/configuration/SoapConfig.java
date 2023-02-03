@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +42,11 @@ import org.springframework.xml.xsd.XsdSchemaCollection;
 @Configuration
 @Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
+    @Value("${cdds.username}")
+    private String username;
+
+    @Value("${cdds.password}")
+    private String password;
 
     public static final String SOAP_NAMESPACE = "http://courts.gov.bc.ca/xml/ns/cdds/v1";
 
@@ -100,8 +107,8 @@ public class SoapConfig extends WsConfigurerAdapter {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        var restTemplate = restTemplateBuilder.basicAuthentication(username, password).build();
         restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
         return restTemplate;
     }
