@@ -123,12 +123,12 @@ objects:
             - name: ORDS_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: ccd-application-secrets
+                  name: cdds-application-secrets
                   key: ORDS_USERNAME
             - name: ORDS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ccd-application-secrets
+                  name: cdds-application-secrets
                   key: ORDS_PASSWORD
             resources:
               limits:
