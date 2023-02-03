@@ -43,10 +43,10 @@ import org.springframework.xml.xsd.XsdSchemaCollection;
 @Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
     @Value("${cdds.username}")
-    private String username;
+    private String username = "";
 
     @Value("${cdds.password}")
-    private String password;
+    private String password = "";
 
     public static final String SOAP_NAMESPACE = "http://courts.gov.bc.ca/xml/ns/cdds/v1";
 
