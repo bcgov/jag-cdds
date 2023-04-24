@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.12</version>
+        <version>2.7.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ca.bc.gov.open</groupId>
     <artifactId>jag-cdds</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>jag-cdds</name>
     <description>jag-cdds</description>
     <properties>
@@ -191,6 +191,22 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.33</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>2.14.2</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <finalName>cdds-application</finalName>
         <plugins>
@@ -310,6 +326,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>7.0.4</version>
             </plugin>
         </plugins>
     </build>

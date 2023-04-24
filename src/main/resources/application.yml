@@ -5,6 +5,8 @@ security:
 cdds:
   host: ${ORDS_HOST}
   namespace: ${CDDS_NAMESPACE}
+  username: ${ORDS_USERNAME}
+  password: ${ORDS_PASSWORD}
 management:
   trace:
     http:

@@ -5,3 +5,5 @@ security:
 cdds:
   host: http://127.0.0.1/
   namespace: ${CDDS_NAMESPACE}
+  username: ${BASIC_AUTH_USER}
+  password: ${BASIC_AUTH_PASS}
