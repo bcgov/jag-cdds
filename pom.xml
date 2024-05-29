@@ -10,12 +10,12 @@
     </parent>
     <groupId>ca.bc.gov.open</groupId>
     <artifactId>jag-cdds</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>jag-cdds</name>
     <description>jag-cdds</description>
     <properties>
         <default-package>ca.bc.gov.open.cdds</default-package>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <log4j2.version>2.17.1</log4j2.version>
     </properties>
 
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.13.1</version>
+            <version>2.17.1</version>
         </dependency>
 
 
@@ -138,12 +138,12 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.3</version>
+            <version>4.12.0</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
-            <version>4.9.3</version>
+            <version>4.12.0</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
@@ -167,7 +167,7 @@
         <dependency>
             <groupId>io.gsonfire</groupId>
             <artifactId>gson-fire</artifactId>
-            <version>1.8.5</version>
+            <version>1.9.0</version>
         </dependency>
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
@@ -240,7 +240,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.14.0</version>
+                <version>0.15.3</version>
                 <executions>
                     <execution>
                         <goals>
