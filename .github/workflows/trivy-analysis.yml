@@ -45,15 +45,16 @@ jobs:
 
       #Run Vulnerability Scan usinig Trivy scanner
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.22.0
         with:
-          scan-type: image
-          image-ref: docker.io/cdds/jag-cdds:${{ github.sha }}
-          format: sarif
-          output: trivy-results.sarif
-          exit-code: 1
+          scan-type: 'image'
+          image-ref: 'docker.io/cdds/jag-cdds:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '1'
           ignore-unfixed: true
-          severity: HIGH,CRITICAL
+          limit-severities-for-sarif: true
+          severity: 'HIGH,CRITICAL'
 
       #Upload results to the Github security tab.
       - name: Upload Trivy scan results to GitHub Security tab
