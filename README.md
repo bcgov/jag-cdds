@@ -11,7 +11,7 @@ CDDS webMethods Retirement Project
 * Docker
 * Docker Compose
 * Maven
-* Java 17
+* Java 21
 * Lombok
 
 ### Application Endpoints
@@ -37,7 +37,7 @@ SPLUNK_INDEX: The index that the application will push logs to. The index must b
 before they can be pushed to.
 
 ### Building the Application
-1) Set intellij to use java 17 for the project modals and sdk
+1) Set intellij to use java 21 for the project modals and sdk
 2) Run ``mvn compile``
 3) Make sure ```target/generated-sources/xjc``` folder in included in module path
 

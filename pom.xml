@@ -15,7 +15,7 @@
     <description>jag-cdds</description>
     <properties>
         <default-package>ca.bc.gov.open.cdds</default-package>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <log4j2.version>2.17.1</log4j2.version>
     </properties>
 
