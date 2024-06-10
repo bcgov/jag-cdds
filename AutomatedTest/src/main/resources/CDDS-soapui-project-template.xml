@@ -149,14 +149,14 @@
 import com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext
 
  def GetDigitalDisplayCourtList = testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].testSteps["getDigitalDisplayCourtList"].getPropertyValue("Request")
- 
+
  def RequestAgencyIdentifierId=testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].getPropertyValue("RequestAgencyIdentifierId")
  def RequestPartId=testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].getPropertyValue("RequestPartId")
  def RequestDtm=testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].getPropertyValue("RequestDtm")
  def AgencyIdentifierId=testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].getPropertyValue("AgencyIdentifierId")
  def AppearanceDt=testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].getPropertyValue("AppearanceDt")
  def CtrmRoomCd=testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].getPropertyValue("CtrmRoomCd")
- 
+
  def xmlAdd= new XmlHolder(GetDigitalDisplayCourtList)
  xmlAdd.setNodeValue("//v1:getDigitalDisplayCourtList/getDigitalDisplayCourtListRequest/ns:getDigitalDisplayCourtListRequest/ns:RequestAgencyIdentifierId",RequestAgencyIdentifierId)
  xmlAdd.setNodeValue("//v1:getDigitalDisplayCourtList/getDigitalDisplayCourtListRequest/ns:getDigitalDisplayCourtListRequest/ns:RequestPartId",RequestPartId)
@@ -164,7 +164,7 @@ import com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext
  xmlAdd.setNodeValue("//v1:getDigitalDisplayCourtList/getDigitalDisplayCourtListRequest/ns:getDigitalDisplayCourtListRequest/ns:AgencyIdentifierId",AgencyIdentifierId)
  xmlAdd.setNodeValue("//v1:getDigitalDisplayCourtList/getDigitalDisplayCourtListRequest/ns:getDigitalDisplayCourtListRequest/ns:AppearanceDt",AppearanceDt)
  xmlAdd.setNodeValue("//v1:getDigitalDisplayCourtList/getDigitalDisplayCourtListRequest/ns:getDigitalDisplayCourtListRequest/ns:CtrmRoomCd",CtrmRoomCd)
- 
+
  def newxmlGet= xmlAdd.getXml();
  //add xml detail
  testRunner.testCase.testSuite.testCases["GetDigitalDisplayCourtList"].testSteps["getDigitalDisplayCourtList"].setPropertyValue("Request",newxmlGet)
@@ -188,7 +188,7 @@ import com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext
  def GetResponse10= Response.getNodeValue("//ns4:CourtLevelCd")
  def GetResponse11= Response.getNodeValue("//ns4:CourtClassCd")
  def GetResponse12= Response.getNodeValue("//ns4:FileNumberTxt")
- 
+
 log.info GetResponse
 log.info GetResponse1
 log.info GetResponse2

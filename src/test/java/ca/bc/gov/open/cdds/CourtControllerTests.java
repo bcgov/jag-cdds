@@ -76,7 +76,7 @@ public class CourtControllerTests {
         a.setCourtClassCd("A");
         a.setFileNumberTxt("A");
         a.setCounselFullNm("A");
-        clr.setAppearance(Collections.singletonList(a));
+        clr.getAppearance().addAll(Collections.singletonList(a));
 
         ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity =
                 new ResponseEntity<>(clr, HttpStatus.OK);

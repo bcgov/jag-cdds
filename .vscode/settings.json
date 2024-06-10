@@ -4,5 +4,6 @@
             "BASIC_AUTH_PASS": "${env:BASIC_AUTH_PASS}",
             "BASIC_AUTH_USER": "${env:BASIC_AUTH_USER}"
         }
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "automatic",
 }
