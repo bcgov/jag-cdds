@@ -142,3 +142,27 @@ Total: 10 (UNKNOWN: 0, LOW: 2, MEDIUM: 8, HIGH: 0, CRITICAL: 0)
 │               │                │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2023-42366                │
 └───────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────┴───────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Release Process
+
+- The initial release is manually triggered using the pipeline defined in [main.yml](./.github/workflows/main.yml).
+	- This can be triggered on any branch.
+	- This pipeline deploys the code to the `dev` environment.
+
+- The promotions to TEST and PROD are performed manually using the pipeline defined in [openshift-imagetagging.yml.](./.github/workflows/openshift-imagetagging.yml)
+	- This pipeline can also be triggered on any branch.
+
+### Steps
+- Create a `release/<verion>` branch.
+- Update the code in the branch of the release.  This could be as simple as a version bump.
+- Open a PR titled `Release/<version>.
+- Trigger [main.yml](./.github/workflows/main.yml) on the `release/<verion>` branch to deploy to `dev`.
+- Run [automationtestapi.yml](./.github/workflows/automationtestapi.yml) to test the deployment.
+- Run [zap-scan-api.yml](./.github/workflows/zap-scan-api.yml) to scan the deployment for vulnerabilities.
+- Promote to `test` using [openshift-imagetagging.yml.](./.github/workflows/openshift-imagetagging.yml).
+- Wait for UAT to complete.
+- Promote to `prod` using [openshift-imagetagging.yml.](./.github/workflows/openshift-imagetagging.yml).
+- Approve and merge the PR.
+- Generate a GitHub release with a tag.  The tag and title should be <version>.
