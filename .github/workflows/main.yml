@@ -226,14 +226,14 @@ jobs:
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
         run: |
           RET=`curl --write-out '%{content_type}' --output TestErrors.zip --request GET --user ${BASIC_AUTH_USER}:${BASIC_AUTH_PASS} --url ${TEST_STARTER_URL}`
-          if [ "$RET" = "application/zip" ]; then
+          if [[ "$RET" = "application/zip"* ]]; then
             echo "Status: Failed Integration Test(s) found!"
             exit 1
           fi
-          if [ "$RET" = "application/json" ]; then
+          if [[ "$RET" = "application/json"* ]]; then
             echo "Status: All Tests Passed"
           fi
-          if [ "$RET" != "application/zip" ] && [ "$RET" != "application/json" ]; then
+          if [[ "$RET" != "application/zip"* ]] && [[ "$RET" != "application/json"* ]]; then
             echo "Received content_type is $RET, was expecting application/json or application/zip"
             exit 1
           fi
