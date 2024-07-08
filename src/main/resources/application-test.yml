@@ -7,3 +7,8 @@ cdds:
   namespace: ${CDDS_NAMESPACE}
   username: ${BASIC_AUTH_USER}
   password: ${BASIC_AUTH_PASS}
+scj:
+  host: http://127.0.0.1/
+  namespace: ${SCJ_NAMESPACE}
+  username: ${SCJ_USERNAME}
+  password: ${SCJ_PASSWORD}

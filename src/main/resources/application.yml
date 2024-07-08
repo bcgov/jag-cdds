@@ -7,6 +7,11 @@ cdds:
   namespace: ${CDDS_NAMESPACE}
   username: ${ORDS_USERNAME}
   password: ${ORDS_PASSWORD}
+scj:
+  host: ${SCJ_HOST}
+  namespace: ${SCJ_NAMESPACE}
+  username: ${SCJ_USERNAME}
+  password: ${SCJ_PASSWORD}
 management:
   trace:
     http:
