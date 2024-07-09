@@ -39,7 +39,7 @@ public class CourtController {
     private String host = "https://127.0.0.1/";
 
     @Value("${scj.host}")
-    private String scjHost = "https://127.0.0.1/";
+    private String scjHost = "";
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -85,9 +85,12 @@ public class CourtController {
             var one = new GetDigitalDisplayCourtListResponse2();
             var in = resp.getBody();
 
-            // Add resonse from the SCJ endpoint before processing the results ...
-            List<Appearance> scjAppearances = getScjDigitalDisplayCourtList(inner);
-            in.getAppearance().addAll(scjAppearances);
+            // Optionally add resonse from the SCJ endpoint before processing the results ...
+            if (!scjHost.isEmpty()) {
+                List<Appearance> scjAppearances = getScjDigitalDisplayCourtList(inner);
+                in.getAppearance().addAll(scjAppearances);
+            }
+
             for (var x : in.getAppearance()) {
                 String newTime = InstantSoapConverter.convertFromAmTo24(x.getAppearanceTime());
                 x.setAppearanceTime(newTime);

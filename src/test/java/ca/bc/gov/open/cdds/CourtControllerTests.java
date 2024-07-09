@@ -24,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -45,6 +46,7 @@ public class CourtControllerTests {
     public void getDigitalDisplayCourtList() throws IOException {
         //  Init service under test
         courtController = new CourtController(restTemplate, objectMapper);
+        ReflectionTestUtils.setField(courtController, "scjHost", "https://127.0.0.1/");
 
         var req = new GetDigitalDisplayCourtList();
         var one = new GetDigitalDisplayCourtListRequest();
@@ -79,6 +81,47 @@ public class CourtControllerTests {
         assert appearances.size() == 2;
         assert appearances.get(0).getCourtListTypeDsc() == "ORDS-CDDS";
         assert appearances.get(1).getCourtListTypeDsc() == "SCJ-CDDS";
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void getDigitalDisplayCourtListWithoutScjCdds() throws IOException {
+        //  Init service under test
+        courtController = new CourtController(restTemplate, objectMapper);
+        ReflectionTestUtils.setField(courtController, "scjHost", "");
+
+        var req = new GetDigitalDisplayCourtList();
+        var one = new GetDigitalDisplayCourtListRequest();
+        var two = new ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest();
+
+        two.setAgencyIdentifierId("A");
+        two.setAppearanceDt("A");
+        two.setCtrmRoomCd("A");
+        two.setRequestPartId("A");
+        two.setRequestDtm("A");
+        two.setRequestAgencyIdentifierId("A");
+
+        one.setGetDigitalDisplayCourtListRequest(two);
+        req.setGetDigitalDisplayCourtListRequest(one);
+
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity1 = generateResponse("ORDS-CDDS");
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity2 = generateResponse("SCJ-CDDS");
+
+        // Set up to mock ORDS and SCJ response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<GetDigitalDisplayCourtListResponse>>any()))
+                .thenReturn(responseEntity1, responseEntity2);
+
+        var out = courtController.getDigitalDisplayCourtList(req);
+
+        // Assert response is correct
+        assert out != null;
+        List<Appearance> appearances = out.getGetDigitalDisplayCourtListResponse().getGetDigitalDisplayCourtListResponse().getAppearance();
+        assert appearances.size() == 1;
+        assert appearances.get(0).getCourtListTypeDsc() == "ORDS-CDDS";
     }
 
     private ResponseEntity<GetDigitalDisplayCourtListResponse> generateResponse(String data) {
