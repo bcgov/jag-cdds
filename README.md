@@ -28,6 +28,8 @@ BASIC_AUTH_USER: The username for the basic authentication. This can be any valu
 
 ORDS_HOST: The url for ords rest package.
 
+SCJ_HOST: The url for the SCJ CDDS endpoint.
+
 SPLUNK_HTTP_URL: The url for the splunk hec. For local splunk this value should be 127.0.0.1:8088 for
 remote do not include /services/collector.
 
@@ -157,7 +159,7 @@ Total: 10 (UNKNOWN: 0, LOW: 2, MEDIUM: 8, HIGH: 0, CRITICAL: 0)
 ### Steps
 - Create a `release/<verion>` branch.
 - Update the code in the branch of the release.  This could be as simple as a version bump.
-- Open a PR titled `Release/<version>.
+- Open a PR titled `Release/<version>`.
 - Trigger [main.yml](./.github/workflows/main.yml) on the `release/<verion>` branch to deploy to `dev`.
 - Run [automationtestapi.yml](./.github/workflows/automationtestapi.yml) to test the deployment.
 - Run [zap-scan-api.yml](./.github/workflows/zap-scan-api.yml) to scan the deployment for vulnerabilities.
@@ -165,4 +167,4 @@ Total: 10 (UNKNOWN: 0, LOW: 2, MEDIUM: 8, HIGH: 0, CRITICAL: 0)
 - Wait for UAT to complete.
 - Promote to `prod` using [openshift-imagetagging.yml.](./.github/workflows/openshift-imagetagging.yml).
 - Approve and merge the PR.
-- Generate a GitHub release with a tag.  The tag and title should be <version>.
+- Generate a GitHub release with a tag.  The tag and title should be `<version>`.
