@@ -14,6 +14,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -38,10 +41,12 @@ public class CourtControllerTests {
 
     @Autowired private MockMvc mockMvc;
 
+    @SuppressWarnings("unchecked")
     @Test
     public void getDigitalDisplayCourtList() throws IOException {
         //  Init service under test
-        courtController = new CourtController(restTemplate, objectMapper);
+        courtController = new CourtController(restTemplate, restTemplate, objectMapper);
+        ReflectionTestUtils.setField(courtController, "scjHost", "https://127.0.0.1/");
 
         var req = new GetDigitalDisplayCourtList();
         var one = new GetDigitalDisplayCourtListRequest();
@@ -57,47 +62,100 @@ public class CourtControllerTests {
         one.setGetDigitalDisplayCourtListRequest(two);
         req.setGetDigitalDisplayCourtListRequest(one);
 
-        var clr = new GetDigitalDisplayCourtListResponse();
-        clr.setResponseCd("A");
-        clr.setResponseMessageTxt("A");
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity1 = generateResponse("ORDS-CDDS");
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity2 = generateResponse("SCJ-CDDS");
 
-        Appearance a = new Appearance();
-        a.setLastNm("A");
-        a.setGiven1Nm("A");
-        a.setInitialNm("A");
-        a.setCtrmRoomCd("A");
-        a.setCourtListTypeDsc("A");
-        a.setStatusDsc("A");
-        a.setAppearanceTime("22-APR-19 09.00.00.000000 AM");
-        a.setAppearanceReasonCd("A");
-        a.setAppearanceReasonDsc("A");
-        a.setCourtDivisionCd("A");
-        a.setCourtLevelCd("A");
-        a.setCourtClassCd("A");
-        a.setFileNumberTxt("A");
-        a.setCounselFullNm("A");
-        clr.getAppearance().addAll(Collections.singletonList(a));
-
-        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity =
-                new ResponseEntity<>(clr, HttpStatus.OK);
-
-        //     Set up to mock ords response
+        // Set up to mock ORDS and SCJ response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.GET),
                         Mockito.<HttpEntity<String>>any(),
                         Mockito.<Class<GetDigitalDisplayCourtListResponse>>any()))
-                .thenReturn(responseEntity);
+                .thenReturn(responseEntity1, responseEntity2);
 
         var out = courtController.getDigitalDisplayCourtList(req);
 
-        //     Assert response is correct
+        // Assert response is correct
         assert out != null;
+        List<Appearance> appearances = out.getGetDigitalDisplayCourtListResponse().getGetDigitalDisplayCourtListResponse().getAppearance();
+        assert appearances.size() == 2;
+        assert appearances.get(0).getCourtListTypeDsc() == "ORDS-CDDS";
+        assert appearances.get(1).getCourtListTypeDsc() == "SCJ-CDDS";
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void getDigitalDisplayCourtListWithoutScjCdds() throws IOException {
+        //  Init service under test
+        courtController = new CourtController(restTemplate, restTemplate, objectMapper);
+        ReflectionTestUtils.setField(courtController, "scjHost", "");
+
+        var req = new GetDigitalDisplayCourtList();
+        var one = new GetDigitalDisplayCourtListRequest();
+        var two = new ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest();
+
+        two.setAgencyIdentifierId("A");
+        two.setAppearanceDt("A");
+        two.setCtrmRoomCd("A");
+        two.setRequestPartId("A");
+        two.setRequestDtm("A");
+        two.setRequestAgencyIdentifierId("A");
+
+        one.setGetDigitalDisplayCourtListRequest(two);
+        req.setGetDigitalDisplayCourtListRequest(one);
+
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity1 = generateResponse("ORDS-CDDS");
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity2 = generateResponse("SCJ-CDDS");
+
+        // Set up to mock ORDS and SCJ response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<GetDigitalDisplayCourtListResponse>>any()))
+                .thenReturn(responseEntity1, responseEntity2);
+
+        var out = courtController.getDigitalDisplayCourtList(req);
+
+        // Assert response is correct
+        assert out != null;
+        List<Appearance> appearances = out.getGetDigitalDisplayCourtListResponse().getGetDigitalDisplayCourtListResponse().getAppearance();
+        assert appearances.size() == 1;
+        assert appearances.get(0).getCourtListTypeDsc() == "ORDS-CDDS";
+    }
+
+    private ResponseEntity<GetDigitalDisplayCourtListResponse> generateResponse(String data) {
+
+        var clr = new GetDigitalDisplayCourtListResponse();
+        clr.setResponseCd(data);
+        clr.setResponseMessageTxt(data);
+
+        Appearance a = new Appearance();
+        a.setLastNm(data);
+        a.setGiven1Nm(data);
+        a.setInitialNm(data);
+        a.setCtrmRoomCd(data);
+        a.setCourtListTypeDsc(data);
+        a.setStatusDsc(data);
+        a.setAppearanceTime("22-APR-19 09.00.00.000000 AM");
+        a.setAppearanceReasonCd(data);
+        a.setAppearanceReasonDsc(data);
+        a.setCourtDivisionCd(data);
+        a.setCourtLevelCd(data);
+        a.setCourtClassCd(data);
+        a.setFileNumberTxt(data);
+        a.setCounselFullNm(data);
+        clr.getAppearance().addAll(Collections.singletonList(a));
+
+        ResponseEntity<GetDigitalDisplayCourtListResponse> responseEntity =
+                new ResponseEntity<>(clr, HttpStatus.OK);
+
+        return responseEntity;
     }
 
     @Test
     public void setSyncSyncCivilHearingRestrictionTest() throws JsonProcessingException {
-        courtController = new CourtController(restTemplate, objectMapper);
+        courtController = new CourtController(restTemplate, restTemplate, objectMapper);
 
         when(restTemplate.exchange(
                         Mockito.any(String.class),

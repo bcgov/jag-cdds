@@ -5,5 +5,10 @@ security:
 cdds:
   host: http://127.0.0.1/
   namespace: ${CDDS_NAMESPACE}
-  username: ${BASIC_AUTH_USER}
-  password: ${BASIC_AUTH_PASS}
+  username: CDDS-${BASIC_AUTH_USER}
+  password: CDDS-${BASIC_AUTH_PASS}
+scj:
+  host: http://127.0.0.1/
+  namespace: ${SCJ_NAMESPACE}
+  username: SCJ-${BASIC_AUTH_USER}
+  password: SCJ-${BASIC_AUTH_PASS}

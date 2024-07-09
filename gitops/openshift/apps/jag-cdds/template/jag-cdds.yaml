@@ -3,13 +3,13 @@ kind: Template
 metadata:
   name: ${APP_NAME}
   description: Deployment template for the JAG-CDDS
-  
+
 labels:
   app: ${APP_NAME}
   app.kubernetes.io/name: ${COMPONENT_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
   app.openshift.io/runtime: ${RUNTIME}
-  
+
 parameters:
 
 - name: APP_NAME
@@ -21,13 +21,13 @@ parameters:
   description: The application name that each component is part of
   required: false
   value: jag-cdds
-  
+
 - name: OC_NAMESPACE
   description: The OpenShift namespace prefix
   required: false
   # Below value must be changed as per gold cluster oc nameplate
   value: 8fc8c2
-  
+
 - name: OC_ENV
   description: The OpenShift environment, ie dev, test or prod
   required: true
@@ -52,7 +52,7 @@ parameters:
   description: The http Authorization header required for performing livenessProbe & readinessProbe in deployment config during container start.
   required: true
   value: ''
-  
+
 objects:
 
 ### JAG-CDDS Deployment Config ###
@@ -61,7 +61,7 @@ objects:
   metadata:
     name: ${COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
-      
+
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -80,7 +80,7 @@ objects:
           # Below Immage url must be changed as per gold cluster image stream
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${OC_ENV}
-            name: ${COMPONENT_NAME} 
+            name: ${COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
               - containerPort: 8080
@@ -130,6 +130,21 @@ objects:
                 secretKeyRef:
                   name: cdds-application-secrets
                   key: ORDS_PASSWORD
+            - name: SCJ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: cdds-application-secrets
+                  key: SCJ_HOST
+            - name: SCJ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cdds-application-secrets
+                  key: SCJ_USERNAME
+            - name: SCJ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cdds-application-secrets
+                  key: SCJ_PASSWORD
             resources:
               limits:
                 cpu: 500m

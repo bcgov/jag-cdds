@@ -5,6 +5,7 @@ import ca.bc.gov.open.cdds.exceptions.ORDSException;
 import ca.bc.gov.open.cdds.models.OrdsErrorLog;
 import ca.bc.gov.open.cdds.models.RequestSuccessLog;
 import ca.bc.gov.open.cdds.models.serializers.InstantSoapConverter;
+import ca.bc.gov.open.cdds.one.Appearance;
 import ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtList;
 import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtListResponse;
@@ -12,6 +13,9 @@ import ca.bc.gov.open.cdds.two.GetDigitalDisplayCourtListResponse2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,12 +38,17 @@ public class CourtController {
     @Value("${cdds.host}")
     private String host = "https://127.0.0.1/";
 
+    @Value("${scj.host}")
+    private String scjHost = "";
+
     private final RestTemplate restTemplate;
+    private final RestTemplate scjRestTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public CourtController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public CourtController(RestTemplate restTemplate, RestTemplate scjRestTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.scjRestTemplate = scjRestTemplate;
         this.objectMapper = objectMapper;
     }
 
@@ -77,6 +86,13 @@ public class CourtController {
             var out = new GetDigitalDisplayCourtListResponse();
             var one = new GetDigitalDisplayCourtListResponse2();
             var in = resp.getBody();
+
+            // Optionally add resonse from the SCJ endpoint before processing the results ...
+            if (!scjHost.isEmpty()) {
+                List<Appearance> scjAppearances = getScjDigitalDisplayCourtList(inner);
+                in.getAppearance().addAll(scjAppearances);
+            }
+
             for (var x : in.getAppearance()) {
                 String newTime = InstantSoapConverter.convertFromAmTo24(x.getAppearanceTime());
                 x.setAppearanceTime(newTime);
@@ -97,6 +113,42 @@ public class CourtController {
                                     "getDigitalDisplayCourtList",
                                     ex.getMessage(),
                                     inner)));
+            throw new ORDSException();
+        }
+    }
+
+    private List<Appearance> getScjDigitalDisplayCourtList(
+        GetDigitalDisplayCourtListRequest request) throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+            UriComponentsBuilder.fromHttpUrl(scjHost)
+                .queryParam("AgencyIdentifierId", request.getRequestAgencyIdentifierId())
+                .queryParam("AppearanceDt", request.getAppearanceDt())
+                .queryParam("CtrmRoomCd", request.getCtrmRoomCd());
+
+        try {
+            HttpEntity<ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse> resp =
+                scjRestTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.GET,
+                    new HttpEntity<>(new HttpHeaders()),
+                    ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse.class);
+
+            log.info(
+                objectMapper.writeValueAsString(
+                    new RequestSuccessLog(
+                        "Request Success", "getScjDigitalDisplayCourtList")));
+
+            List<Appearance> scjAppearances = resp.getBody().getAppearance();
+            return scjAppearances;
+        } catch (Exception ex) {
+            log.error(
+                objectMapper.writeValueAsString(
+                    new OrdsErrorLog(
+                        "Error received from SCJ endpoint",
+                        "getScjDigitalDisplayCourtList",
+                        ex.getMessage(),
+                        request)));
             throw new ORDSException();
         }
     }
