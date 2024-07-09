@@ -45,7 +45,7 @@ public class CourtControllerTests {
     @Test
     public void getDigitalDisplayCourtList() throws IOException {
         //  Init service under test
-        courtController = new CourtController(restTemplate, objectMapper);
+        courtController = new CourtController(restTemplate, restTemplate, objectMapper);
         ReflectionTestUtils.setField(courtController, "scjHost", "https://127.0.0.1/");
 
         var req = new GetDigitalDisplayCourtList();
@@ -87,7 +87,7 @@ public class CourtControllerTests {
     @Test
     public void getDigitalDisplayCourtListWithoutScjCdds() throws IOException {
         //  Init service under test
-        courtController = new CourtController(restTemplate, objectMapper);
+        courtController = new CourtController(restTemplate, restTemplate, objectMapper);
         ReflectionTestUtils.setField(courtController, "scjHost", "");
 
         var req = new GetDigitalDisplayCourtList();
@@ -155,7 +155,7 @@ public class CourtControllerTests {
 
     @Test
     public void setSyncSyncCivilHearingRestrictionTest() throws JsonProcessingException {
-        courtController = new CourtController(restTemplate, objectMapper);
+        courtController = new CourtController(restTemplate, restTemplate, objectMapper);
 
         when(restTemplate.exchange(
                         Mockito.any(String.class),

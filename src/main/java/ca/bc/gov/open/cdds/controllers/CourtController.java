@@ -42,11 +42,13 @@ public class CourtController {
     private String scjHost = "";
 
     private final RestTemplate restTemplate;
+    private final RestTemplate scjRestTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public CourtController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public CourtController(RestTemplate restTemplate, RestTemplate scjRestTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.scjRestTemplate = scjRestTemplate;
         this.objectMapper = objectMapper;
     }
 
@@ -126,7 +128,7 @@ public class CourtController {
 
         try {
             HttpEntity<ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse> resp =
-                restTemplate.exchange(
+                scjRestTemplate.exchange(
                     builder.toUriString(),
                     HttpMethod.GET,
                     new HttpEntity<>(new HttpHeaders()),

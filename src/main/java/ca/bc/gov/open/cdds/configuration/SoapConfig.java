@@ -48,6 +48,12 @@ public class SoapConfig extends WsConfigurerAdapter {
     @Value("${cdds.password}")
     private String password;
 
+    @Value("${scj.username}")
+    private String scjUsername;
+
+    @Value("${scj.password}")
+    private String scjPassword;
+
     public static final String SOAP_NAMESPACE = "http://courts.gov.bc.ca/xml/ns/cdds/v1";
 
     @Override
@@ -109,6 +115,13 @@ public class SoapConfig extends WsConfigurerAdapter {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         var restTemplate = restTemplateBuilder.basicAuthentication(username, password).build();
+        restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
+        return restTemplate;
+    }
+
+    @Bean
+    public RestTemplate scjRestTemplate(RestTemplateBuilder restTemplateBuilder) {
+        var restTemplate = restTemplateBuilder.basicAuthentication(scjUsername, scjPassword).build();
         restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
         return restTemplate;
     }
