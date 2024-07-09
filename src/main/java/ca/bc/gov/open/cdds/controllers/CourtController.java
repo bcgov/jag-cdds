@@ -86,7 +86,8 @@ public class CourtController {
             var in = resp.getBody();
 
             // Add resonse from the SCJ endpoint before processing the results ...
-            in.getAppearance().addAll(getScjDigitalDisplayCourtList(inner));
+            List<Appearance> scjAppearances = getScjDigitalDisplayCourtList(inner);
+            in.getAppearance().addAll(scjAppearances);
             for (var x : in.getAppearance()) {
                 String newTime = InstantSoapConverter.convertFromAmTo24(x.getAppearanceTime());
                 x.setAppearanceTime(newTime);
@@ -133,7 +134,8 @@ public class CourtController {
                     new RequestSuccessLog(
                         "Request Success", "getScjDigitalDisplayCourtList")));
 
-            return resp.getBody().getAppearance();
+            List<Appearance> scjAppearances = resp.getBody().getAppearance();
+            return scjAppearances;
         } catch (Exception ex) {
             log.error(
                 objectMapper.writeValueAsString(
