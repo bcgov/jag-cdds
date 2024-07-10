@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,8 +90,18 @@ public class CourtController {
 
             // Optionally add resonse from the SCJ endpoint before processing the results ...
             if (!scjHost.isEmpty()) {
-                List<Appearance> scjAppearances = getScjDigitalDisplayCourtList(inner);
-                in.getAppearance().addAll(scjAppearances);
+                try {
+                    List<Appearance> scjAppearances = getScjDigitalDisplayCourtList(inner);
+                    in.getAppearance().addAll(scjAppearances);
+                } catch (Exception e) {
+                    log.error(
+                        objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                "Error fetching court list from SCJ CDDS endpoint.  See previous errors for details.",
+                                "getDigitalDisplayCourtList",
+                                e.getMessage(),
+                                inner)));
+                }
             }
 
             for (var x : in.getAppearance()) {
@@ -119,14 +130,15 @@ public class CourtController {
 
     private List<Appearance> getScjDigitalDisplayCourtList(
         GetDigitalDisplayCourtListRequest request) throws JsonProcessingException {
-
-        UriComponentsBuilder builder =
-            UriComponentsBuilder.fromHttpUrl(scjHost)
-                .queryParam("AgencyIdentifierId", request.getRequestAgencyIdentifierId())
-                .queryParam("AppearanceDt", request.getAppearanceDt())
-                .queryParam("CtrmRoomCd", request.getCtrmRoomCd());
-
         try {
+            // Strip the time off the Appearance Date
+            LocalDate appearanceDt = LocalDate.parse(request.getAppearanceDt().split(" ")[0]);
+            UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(scjHost)
+                    .queryParam("AgencyIdentifierId", request.getRequestAgencyIdentifierId())
+                    .queryParam("AppearanceDt", appearanceDt.toString())
+                    .queryParam("CtrmRoomCd", request.getCtrmRoomCd());
+
             HttpEntity<ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse> resp =
                 scjRestTemplate.exchange(
                     builder.toUriString(),

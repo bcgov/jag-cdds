@@ -53,7 +53,7 @@ public class CourtControllerTests {
         var two = new ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest();
 
         two.setAgencyIdentifierId("A");
-        two.setAppearanceDt("A");
+        two.setAppearanceDt("2024-07-09 00:00:00.0");
         two.setCtrmRoomCd("A");
         two.setRequestPartId("A");
         two.setRequestDtm("A");
@@ -95,7 +95,7 @@ public class CourtControllerTests {
         var two = new ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListRequest();
 
         two.setAgencyIdentifierId("A");
-        two.setAppearanceDt("A");
+        two.setAppearanceDt("2024-07-09 00:00:00.0");
         two.setCtrmRoomCd("A");
         two.setRequestPartId("A");
         two.setRequestDtm("A");
