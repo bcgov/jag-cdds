@@ -15,13 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -139,19 +141,42 @@ public class CourtController {
                     .queryParam("AppearanceDt", appearanceDt.toString())
                     .queryParam("CtrmRoomCd", request.getCtrmRoomCd());
 
-            HttpEntity<ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse> resp =
-                scjRestTemplate.exchange(
+            // ToDo:
+            //  - Get serialization of the SCJ CDDS resopnse working properly.
+            //  - This is just to get it working for now.
+            ResponseEntity<Object[]> resp =
+                scjRestTemplate.getForEntity(
                     builder.toUriString(),
-                    HttpMethod.GET,
-                    new HttpEntity<>(new HttpHeaders()),
-                    ca.bc.gov.open.cdds.one.GetDigitalDisplayCourtListResponse.class);
+                    Object[].class);
+
+            Object[] data = resp.getBody();
+            ArrayList<Appearance> scjAppearances = new ArrayList<>();
+            for(Object item : data) {
+                @SuppressWarnings("unchecked")
+                HashMap<String,String> hashMap = (HashMap<String,String>)item;
+                Appearance appearance = new Appearance();
+                appearance.setAppearanceReasonCd(hashMap.get("AppearanceReasonCd"));
+                appearance.setAppearanceReasonDsc(hashMap.get("AppearanceReasonDsc"));
+                appearance.setAppearanceTime(hashMap.get("AppearanceTime"));
+                appearance.setCounselFullNm(hashMap.get("CounselFullNm"));
+                appearance.setCourtClassCd(hashMap.get("CourtClassCd"));
+                appearance.setCourtDivisionCd(hashMap.get("CourtDivisionCd"));
+                appearance.setCourtLevelCd(hashMap.get("CourtLevelCd"));
+                appearance.setCourtListTypeDsc(hashMap.get("CourtListTypeDsc"));
+                appearance.setCtrmRoomCd(hashMap.get("CtrmRoomCd"));
+                appearance.setFileNumberTxt(hashMap.get("FileNumberTxt"));
+                appearance.setGiven1Nm(hashMap.get("Given1Nm"));
+                appearance.setInitialNm(hashMap.get("InitialNm"));
+                appearance.setLastNm(hashMap.get("LastNm"));
+                appearance.setStatusDsc(hashMap.get("StatusDsc"));
+                scjAppearances.add(appearance);
+            }
 
             log.info(
                 objectMapper.writeValueAsString(
                     new RequestSuccessLog(
                         "Request Success", "getScjDigitalDisplayCourtList")));
 
-            List<Appearance> scjAppearances = resp.getBody().getAppearance();
             return scjAppearances;
         } catch (Exception ex) {
             log.error(
