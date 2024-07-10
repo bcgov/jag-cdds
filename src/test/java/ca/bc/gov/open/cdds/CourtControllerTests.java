@@ -44,8 +44,8 @@ public class CourtControllerTests {
 
     @Autowired private MockMvc mockMvc;
 
-    @Test
     @Ignore("This test is meant for testing with live endpoints and data.")
+    // @Test
     public void getLiveDigitalDisplayCourtList() throws IOException {
         var req = new GetDigitalDisplayCourtList();
         var one = new GetDigitalDisplayCourtListRequest();
@@ -69,8 +69,6 @@ public class CourtControllerTests {
         assert appearances.size() > 1;
     }
 
-
-    @SuppressWarnings("unchecked")
     @Test
     public void getDigitalDisplayCourtList() throws IOException {
         //  Init service under test
