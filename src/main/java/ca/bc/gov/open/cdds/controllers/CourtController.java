@@ -137,7 +137,7 @@ public class CourtController {
             LocalDate appearanceDt = LocalDate.parse(request.getAppearanceDt().split(" ")[0]);
             UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(scjHost)
-                    .queryParam("AgencyIdentifierId", request.getRequestAgencyIdentifierId())
+                    .queryParam("AgencyIdentifierId", request.getAgencyIdentifierId())
                     .queryParam("AppearanceDt", appearanceDt.toString())
                     .queryParam("CtrmRoomCd", request.getCtrmRoomCd());
 
