@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,7 +49,14 @@ public final class InstantSoapConverter {
     }
 
     public static String convertFromAmTo24(String appearanceTime) throws ParseException {
-        var sdf = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS a", Locale.US);
+        // Default ORDS CDDS format
+        String datePattern = "dd-MMM-yy hh.mm.ss.SSSSSS a";
+        if (Pattern.compile("^\\d{4}").matcher(appearanceTime).find()) {
+            // SCJ CDDS Format
+            datePattern = "yyyy-MMM-dd hh:mm:ss a";
+        }
+
+        var sdf = new SimpleDateFormat(datePattern, Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-7"));
         var d = sdf.parse(appearanceTime).toInstant();
         return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")
