@@ -97,7 +97,11 @@ SPLUNK_INDEX
 
 ### Vunerability Scanning - Locally
 1) Run ```docker build --no-cache -t cdds/jag-cdds:test .```
-2) Run ```docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy image --insecure cdds/jag-cdds:test```
+2) Run ```docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy image --insecure cdds/jag-cdds:test```.
+   If you are running the scans outside the devContainer and within a Bash/GitBash terminal on Windows you need to use the following format for the command:
+   ```docker run -it -v //var/run/docker.sock:/var/run/docker.sock -v /$HOME/Library/Caches:/root/.cache/ aquasec/trivy image --insecure cdds/jag-cdds:test```
+   If you run into errors regarding downloading definition databases try removing the `--insecure` flag.
+   If you run into errors regarding too many requests, wait a moment and try again.
 
 The above steps build the jag-cdds container and then use the Trivy docker container to scan the resulting images.  The output will look something like this:
 
