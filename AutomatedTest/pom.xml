@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.smartbear.soapui</groupId>
             <artifactId>soapui</artifactId>
-            <version>5.7.2</version>
+            <version>5.8.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>jetty</groupId>
